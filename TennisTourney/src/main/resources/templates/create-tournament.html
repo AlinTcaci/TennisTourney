@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Tournament</title>
+</head>
+<body>
+<div class="container">
+    <h1>Create Tournament</h1>
+
+    <!-- Form to create a new tournament -->
+    <form th:action="@{/create-tournament}" th:object="${tournament}" method="post">
+        <div>
+            <label for="tournamentName">Tournament Name:</label>
+            <input type="text" id="tournamentName" th:field="*{tournamentName}" required>
+        </div>
+        <div>
+            <label for="location">Location:</label>
+            <input type="text" id="location" th:field="*{tournamentLocation}" required>
+        </div>
+        <div>
+            <button type="submit">Create Tournament</button>
+        </div>
+    </form>
+
+    <!-- Success message -->
+    <div th:if="${successMessage}" th:text="${successMessage}">
+        <!-- Success message will be displayed here if present -->
+    </div>
+
+    <hr>
+
+    <!-- Table to display existing tournaments -->
+    <h2>Existing Tournaments</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tournament : ${tournaments}">
+            <td th:text="${tournament.tournamentName}"></td>
+            <td th:text="${tournament.tournamentLocation}"></td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>
+</body>
+</html>

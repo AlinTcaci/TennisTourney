@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Matches</title>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function updatePlayers() {
+            const tournamentId = document.getElementById('tournament').value;
+            fetch(`/tournament/${tournamentId}/registrations`)
+                .then(response => response.json())
+                .then(data => {
+                    const player1Select = document.getElementById('player1');
+                    const player2Select = document.getElementById('player2');
+                    player1Select.innerHTML = '';
+                    player2Select.innerHTML = '';
+                    data.forEach(user => {
+                        const option = new Option(user.name, user.id);
+                        player1Select.add(option.cloneNode(true));
+                        player2Select.add(option);
+                    });
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updatePlayers();  // Call this function to load initial player data
+        });
+        /*]]>*/
+    </script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function loadReferees() {
+            fetch('/users/referees')
+                .then(response => response.json())
+                .then(data => {
+                    const refereeSelect = document.getElementById('referee');
+                    refereeSelect.innerHTML = ''; // Clear existing options
+                    data.forEach(user => {
+                        const option = new Option(user.name, user.id);
+                        refereeSelect.add(option);
+                    });
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadReferees();  // Load referees when the document is ready
+        });
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Create Matches</h1>
+
+    <h2>Tournaments</h2>
+    <table>
+        <tr><th>Id</th><th>Name</th><th>Location</th></tr>
+        <tr th:each="tournament : ${tournaments}">
+            <td th:text="${tournament.getTournamentID()}" ></td>
+            <td th:text="${tournament.tournamentName}"></td>
+            <td th:text="${tournament.tournamentLocation}"></td>
+        </tr>
+    </table>
+
+    <h2>Users</h2>
+    <table>
+        <tr><th>Id</th><th>Name</th><th>Email</th><th>Role</th></tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role}"></td>
+        </tr>
+    </table>
+
+<!--    <h2>Registrations</h2>-->
+<!--    <table>-->
+<!--        <tr><th>Id</th><th>User ID</th><th>Tournament ID</th></tr>-->
+<!--        <tr th:each="registration : ${registrations}">-->
+<!--            <td th:text="${registration.id}"></td>-->
+<!--            <td th:text="${registration.user.id}"></td>-->
+<!--            <td th:text="${registration.tournament.tournamentID}"></td>-->
+<!--        </tr>-->
+<!--    </table>-->
+
+    <h2>Matches</h2>
+    <table>
+        <tr><th>Id</th><th>Date</th><th>Tournament Name</th><th>Location</th><th>Score</th><th>Player 1</th><th>Player 2</th><th>Referee</th></tr>
+        <tr th:each="match : ${matches}">
+            <td th:text="${match.id}"></td>
+            <td th:text="${match.matchDate}"></td>
+            <td th:text="${match.tournament.tournamentName}"></td>
+            <td th:text="${match.tournament.tournamentLocation}"></td>
+            <td th:text="${match.score}"></td>
+            <td th:text="${match.player1.name}"></td>
+            <td th:text="${match.player2.name}"></td>
+            <td th:text="${match.referee.name}"></td>
+        </tr>
+    </table>
+
+    <h2>Create a New Match</h2>
+    <form action="#" th:action="@{/create-match}" th:object="${match}" method="post">
+        <div>
+            <label for="tournament">Tournament:</label>
+            <select id="tournament" th:field="*{tournament.tournamentID}" onchange="updatePlayers()">
+                <option th:each="tournament : ${tournaments}" th:value="${tournament.tournamentID}" th:text="${tournament.tournamentName}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="date">Match Date:</label>
+            <input type="date" id="date" th:field="*{matchDate}" required />
+        </div>
+        <div>
+            <label for="player1">Player 1:</label>
+            <select id="player1" th:field="*{player1.id}">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        <div>
+            <label for="player2">Player 2:</label>
+            <select id="player2" th:field="*{player2.id}">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        <div>
+            <label for="referee">Referee:</label>
+            <select id="referee" th:field="*{referee.id}">
+            </select>
+        </div>
+
+        <div>
+            <label for="score">Score:</label>
+            <input type="text" id="score" th:field="*{score}" required />
+        </div>
+        <div>
+            <button type="submit">Create Match</button>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>

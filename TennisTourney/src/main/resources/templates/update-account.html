@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Account</title>
+</head>
+<body>
+<h1>Update Your Account</h1>
+<div th:if="${updateSuccess != null and !updateSuccess.isEmpty()}">
+    <p th:text="${updateSuccess}"></p>
+</div>
+<div th:if="${updateError != null and !updateError.isEmpty()}">
+    <p th:text="${updateError}"></p>
+</div>
+<form th:action="@{/update-account}" method="post">
+    <input type="hidden" th:value="${user.id}" name="id"/>
+    <input type="text" th:value="${user.name}" name="name" placeholder="Name"/>
+    <input type="email" th:value="${user.email}" name="email" placeholder="Email"/>
+    <input type="password" name="password" placeholder="New Password (Leave blank if unchanged)"/>
+    <select name="role">
+        <option th:selected="${user.role == 'ADMIN'}" value="ADMIN">Admin</option>
+        <option th:selected="${user.role == 'PLAYER'}" value="PLAYER">Player</option>
+        <option th:selected="${user.role == 'REFEREE'}" value="REFEREE">Referee</option>
+    </select>
+    <button type="submit">Update</button>
+</form>
+
+
+</body>
+</html>

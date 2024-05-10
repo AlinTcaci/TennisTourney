@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home Page</title>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to Your Referee Page, <span th:text="${user.name}"></span></h1>
+    <div class="nav-buttons">
+        <a href="../../login" class="button logout-btn">Logout</a><br>
+        <a href="/update-account" class="button">Update Account</a><br>
+        <a href="/view-schedule-referee" class="button">View Schedule</a><br>
+    </div>
+</div>
+</body>
+</html>
