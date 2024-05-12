@@ -3,6 +3,7 @@ package com.api.TennisTourney.controller;
 import com.api.TennisTourney.exceptions.ResourceAlreadyExists;
 import com.api.TennisTourney.model.User;
 import com.api.TennisTourney.service.AuthService;
+import com.api.TennisTourney.service.TournamentService;
 import com.api.TennisTourney.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
@@ -19,10 +20,13 @@ public class UserController {
     private final UserService userService;
     private final AuthService authService;
 
+    private final TournamentService tournamentService;
+
     @Autowired
-    public UserController(UserService userService, AuthService authService) {
+    public UserController(UserService userService, AuthService authService, TournamentService tournamentService) {
         this.userService = userService;
         this.authService = authService;
+        this.tournamentService = tournamentService;
     }
 
     @PostMapping
@@ -86,6 +90,7 @@ public class UserController {
         User user = (User) session.getAttribute("user");
         if(user!=null) {
             model.addAttribute("user", user);
+
             return "/referee/home";
         } else {
             return "redirect:/login";

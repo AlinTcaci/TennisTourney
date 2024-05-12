@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -63,16 +64,36 @@ public class MatchController {
         return "view-schedule-player"; // the name of the HTML file to render
     }
 
+//    @GetMapping("/view-schedule-referee")
+//    public String viewRefereeSchedule(HttpSession session, Model model) {
+//        User user = (User) session.getAttribute("user");
+//        if (user == null) {
+//            return "redirect:/login";  // redirect to login if no user in session
+//        }
+//        List<Match> matches = matchService.getMatchesForReferee(user.getId());
+//        model.addAttribute("matches", matches);
+//        return "view-schedule-referee";  // the name of the HTML file to render
+//    }
+
     @GetMapping("/view-schedule-referee")
-    public String viewRefereeSchedule(HttpSession session, Model model) {
+    public String viewRefereeSchedule(HttpSession session, Model model,
+                                      @RequestParam(required = false) LocalDate fromDate,
+                                      @RequestParam(required = false) LocalDate toDate,
+                                      @RequestParam(required = false) Long tournamentId,
+                                      @RequestParam(required = false) Long playerId) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            return "redirect:/login";  // redirect to login if no user in session
+            return "redirect:/login";
         }
-        List<Match> matches = matchService.getMatchesForReferee(user.getId());
+        Long refereeId = user.getId();
+        List<Match> matches = matchService.getFilteredMatchesForReferee(refereeId, fromDate, toDate, tournamentId, playerId);
         model.addAttribute("matches", matches);
-        return "view-schedule-referee";  // the name of the HTML file to render
+        model.addAttribute("tournaments", matchService.getTournamentsForReferee(refereeId));
+        model.addAttribute("players", matchService.getPlayersForReferee(refereeId));
+        return "view-schedule-referee";
     }
+
+
 
 
     @PostMapping("/update-match-score")

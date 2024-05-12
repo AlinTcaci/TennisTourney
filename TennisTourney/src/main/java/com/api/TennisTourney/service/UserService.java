@@ -86,4 +86,8 @@ public class UserService {
     public List<User> getReferees() {
         return userRepository.findByRole("REFEREE");
     }
+
+    public List<User> getAllPlayers() {
+        return userRepository.findByRole("PLAYER");
+    }
 }

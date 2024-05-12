@@ -1,13 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Referee Schedule</title>
-</head>
-<body>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>View Referee Schedule</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <h1>Referee Match Schedule</h1>-->
+<!--    <form method="post" action="/update-match-score">-->
+<!--        <table border="1">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>Match ID</th>-->
+<!--                <th>Tournament</th>-->
+<!--                <th>Player 1</th>-->
+<!--                <th>Player 2</th>-->
+<!--                <th>Referee</th>-->
+<!--                <th>Date</th>-->
+<!--                <th>Score</th>-->
+<!--                <th>Update Score</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="match : ${matches}">-->
+<!--                <td th:text="${match.id}"></td>-->
+<!--                <td th:text="${match.tournament.tournamentName}"></td>-->
+<!--                <td th:text="${match.player1.name}"></td>-->
+<!--                <td th:text="${match.player2.name}"></td>-->
+<!--                <td th:text="${match.referee.name}"></td>-->
+<!--                <td th:text="${match.matchDate}"></td>-->
+<!--                <td><input type="text" th:name="|score-${match.id}|" th:value="${match.score}" /></td>-->
+<!--                <td><button type="submit" th:name="matchId" th:value="${match.id}">Update</button></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
 <div class="container">
     <h1>Referee Match Schedule</h1>
+    <!-- Filter Form -->
+    <form method="get" action="/view-schedule-referee">
+        <label for="fromDate">From:</label>
+        <input type="date" id="fromDate" name="fromDate">
+
+        <label for="toDate">To:</label>
+        <input type="date" id="toDate" name="toDate">
+
+        <label for="tournamentId">Tournament:</label>
+        <select id="tournamentId" name="tournamentId">
+            <option value="">Select Tournament</option>
+            <option th:each="tournament : ${tournaments}" th:value="${tournament.tournamentID}" th:text="${tournament.tournamentName}"></option>
+        </select>
+
+
+        <label for="playerId">Player:</label>
+        <select id="playerId" name="playerId">
+            <option value="">Select Player</option>
+            <option th:each="player : ${players}" th:value="${player.id}" th:text="${player.name}"></option>
+        </select>
+
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Update Score Form -->
     <form method="post" action="/update-match-score">
         <table border="1">
             <thead>
@@ -37,5 +96,3 @@
         </table>
     </form>
 </div>
-</body>
-</html>
