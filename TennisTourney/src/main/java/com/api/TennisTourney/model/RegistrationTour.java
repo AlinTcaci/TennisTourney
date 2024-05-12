@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.Mapping;
 
 @Setter
 @Getter
@@ -20,11 +19,13 @@ public class RegistrationTour {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "tournament_id", referencedColumnName = "tournament_id") // Foreign key to Tournament
+    @JoinColumn(name = "tournament_id", referencedColumnName = "tournament_id")
     private Tournament tournament;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id") // Foreign key to User
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
+    @Column(name = "status")
+    private String status = "pending"; // Default status is now "pending"
 }

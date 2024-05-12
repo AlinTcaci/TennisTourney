@@ -52,10 +52,40 @@ public class TournamentController {
         return "redirect:/create-tournament";
     }
 
-    @GetMapping("/tournament/{tournamentId}/registrations")
-    @ResponseBody
-    public List<User> getRegisteredUsers(@PathVariable Long tournamentId) {
-        return registrationTourService.getUsersByTournament(tournamentId);
+//    @GetMapping("/tournament/{tournamentId}/registrations")
+//    @ResponseBody
+//    public List<User> getRegisteredUsers(@PathVariable Long tournamentId) {
+//        return registrationTourService.getUsersByTournament(tournamentId);
+//    }
+
+    @GetMapping("/pending-registrations")
+    public String showPendingRegistrations(Model model) {
+        List<RegistrationTour> pendingRegistrations = registrationTourService.findRegistrationsByStatus("pending");
+        model.addAttribute("registrations", pendingRegistrations);
+        return "pending-registrations";
     }
+
+    @PostMapping("/approve-registration")
+    public String approveRegistration(@RequestParam Long registrationId, RedirectAttributes redirectAttributes) {
+        registrationTourService.updateRegistrationStatus(registrationId, "accepted");
+        redirectAttributes.addFlashAttribute("successMessage", "Registration approved and email notification sent.");
+        return "redirect:/pending-registrations";
+    }
+
+    @PostMapping("/deny-registration")
+    public String denyRegistration(@RequestParam Long registrationId, RedirectAttributes redirectAttributes) {
+        registrationTourService.updateRegistrationStatus(registrationId, "denied");
+        redirectAttributes.addFlashAttribute("successMessage", "Registration denied and email notification sent.");
+        return "redirect:/pending-registrations";
+    }
+
+
+
+    @GetMapping("/tournament/{tournamentId}/accepted-registrations")
+    @ResponseBody
+    public List<User> getAcceptedRegistrations(@PathVariable Long tournamentId) {
+        return registrationTourService.getAcceptedUsersByTournament(tournamentId);
+    }
+
 
 }

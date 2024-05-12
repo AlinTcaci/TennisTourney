@@ -8,7 +8,7 @@
         /*<![CDATA[*/
         function updatePlayers() {
             const tournamentId = document.getElementById('tournament').value;
-            fetch(`/tournament/${tournamentId}/registrations`)
+            fetch(`/tournament/${tournamentId}/accepted-registrations`)
                 .then(response => response.json())
                 .then(data => {
                     const player1Select = document.getElementById('player1');
@@ -22,6 +22,7 @@
                     });
                 });
         }
+
 
         document.addEventListener('DOMContentLoaded', function () {
             updatePlayers();  // Call this function to load initial player data

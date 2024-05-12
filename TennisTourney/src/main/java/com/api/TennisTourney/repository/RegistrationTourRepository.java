@@ -11,4 +11,8 @@ import java.util.List;
 public interface RegistrationTourRepository extends JpaRepository<RegistrationTour, Long> {
     boolean existsByTournament_TournamentIDAndUser_Id(Long tournamentID, Long userID);
     List<RegistrationTour> findByTournament_TournamentID(Long tournamentId);
+
+    List<RegistrationTour> findByStatus(String pending);
+    List<RegistrationTour> findByTournament_TournamentIDAndStatus(Long tournamentId, String status);
+
 }

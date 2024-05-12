@@ -1,10 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Registrations</title>
 </head>
 <body>
-$END$
+<div class="container">
+    <h1>Pending Tournament Registrations</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Tournament Name</th>
+            <th>Approve</th>
+            <th>Deny</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="registration : ${registrations}">
+            <td th:text="${registration.user.name}"></td>
+            <td th:text="${registration.tournament.tournamentName}"></td>
+            <td>
+                <form th:action="@{/approve-registration}" method="post">
+                    <input type="hidden" th:value="${registration.id}" name="registrationId">
+                    <button type="submit">Approve</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/deny-registration}" method="post">
+                    <input type="hidden" th:value="${registration.id}" name="registrationId">
+                    <button type="submit">Deny</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
