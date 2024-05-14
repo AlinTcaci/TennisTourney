@@ -30,9 +30,18 @@ public class UserController {
     }
 
     @PostMapping
-    public void registerUser(@RequestBody User user) {
-        userService.addNewUser(user);
+    public void registerUser(User user, RedirectAttributes redirectAttributes) {
+        try {
+            userService.addNewUser(user);
+            redirectAttributes.addFlashAttribute("successMessage", "Registered successfully!");
+        } catch (IllegalStateException e) {
+            throw e;  // Ensure it propagates for the test to catch
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Registration failed: " + e.getMessage());
+        }
     }
+
+
 
     @DeleteMapping(path="{userId}")
     public void deleteStudent(@PathVariable("userId") Long id) {
